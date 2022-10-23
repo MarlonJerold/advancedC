@@ -1,30 +1,49 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int tamanho = 6;
-char mapa [6][10+1];
 
-int main(){
+char** mapa;
+int linhas;
+int colunas;
 
 
+void libermapa(){
+    for (int i = 0; i < linhas; i++){
+        free(mapa[i]);
+    }
+    free(mapa);
+}
+void lermapa(){
     FILE* f;
     f = fopen("mapa.txt", "r");
 
     if (f == 0){
         printf("Error na leitura do mapa");
         exit(1);
-    }else{
-        printf("arquivo lido com sucesso\n");
     }
     
-    for (int i = 0; i < tamanho; i++){
+    fscanf(f, "%d %d", &linhas, &colunas);
+
+    alocamapa();
+
+    for (int i = 0; i < 5; i++){
         fscanf(f, "%s", mapa[i]);
     }
-
-    for(int i = 0; i < tamanho; i++){
+    fclose(f);
+}
+void alocamapa(){
+    mapa = malloc(sizeof(char*) * linhas);
+    for (int i = 0; i < linhas; i++){
+        mapa[i] = malloc(sizeof(char) * (colunas + 1));
+    }
+}
+int main(){
+    lermapa();
+    
+    for(int i = 0; i < 5; i++){
         printf("%s\n", mapa[i]);
     }
 
-    fclose(f);
+    libermapa();
 
 }
